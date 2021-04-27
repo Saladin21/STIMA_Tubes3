@@ -9,18 +9,18 @@ Penerapan String Matching dan Regular Expression dalam Pembangunan Deadline Remi
 ## Penjelasan Singkat Program
 
 
-## REQUIREMENT
+## Requirement
 
 
-## CARA MENGGUNAKAN PROGRAM
+## Cara Menggunakan Program
 
 
-## CATATAN
+## Catatan
 
 
 ## Author
 | Nama | NIM |
 |------|-----|
 | [Epata Tuah](https://github.com/epata) | 13519120 |
-| [Ahmad Saladin](https://github.com/Saladin21) | 13519120 |
+| [Ahmad Saladin](https://github.com/Saladin21) | 13519187 |
 | [Prana Gusriana](https://github.com/pranagusriana) | 13519195|
