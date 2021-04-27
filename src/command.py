@@ -4,7 +4,23 @@ import database
 import re
 
 
-#def executeCommand(s):
+def executeCommand(s):
+    task = getTask(s)
+    if (task):
+        return task
+    newtask = createTask(s)
+    if (newtask):
+        return newtask
+    remove = removeTask(s)
+    if (remove):
+        return remove
+    update = updateTask(s)
+    if (update):
+        return update
+    help = showHelp(s)
+    if (showHelp):
+        return help
+    return "Maaf command kamu tidak dikenali"
 
 def getKataPenting(s):
     penting = database.getAllKataPenting()
@@ -56,10 +72,11 @@ def updateTask(s):
         return False
 
 def getTask(s):
+    #belum ada liat tugas spesifik
     if (bmMatching("deadline", s)):
         jenis = getKataPenting(s)
         if (jenis):
-            x = re.search(r"[0-9]+ (hari|minggu)", s)
+            x = re.search(r"\b[0-9]+ (hari|minggu)", s)
             if (x):
                 n = x.group().split(" ")
                 date = str(datetime.date(datetime.now()))
@@ -78,7 +95,7 @@ def getTask(s):
                     else:
                         return database.PrintAllTaskKataPenting(jenis)
         else:
-            x = re.search(r"[0-9]+ (hari|minggu)", s)
+            x = re.search(r"\b[0-9]+ (hari|minggu)", s)
             if (x):
                 n = x.group().split(" ")
                 date = str(datetime.date(datetime.now()))
@@ -95,14 +112,29 @@ def getTask(s):
                     if (date):
                         return database.PrintTaskToday()
                     else:
-                        return False
+                        return database.PrintAllTask()
     else:
         return False
         
+def removeTask(s):
+    if (bmMatching("selesai", s)):
+        x = re.search(r"\b[0-9]+\b", s)
+        if (x):
+            return database.DeleteTask(int(x.group()))
+        else:
+            return False
+    else:
+        return False
 
+def showHelp(s):
+    x = re.search(r"(A|a)pa .*assistant | (A|a)ssistant .*apa", s)
+    if (x):
+        return database.help()
+    else:
+        return False
 
 
 database.CreateTable()
 
-s = "deadline 16 minggu ke depan" 
-print(getTask(s))
+s = "semua deadline" 
+print(executeCommand(s))
