@@ -18,9 +18,9 @@ def executeCommand(s):
     if (update):
         return update
     help = showHelp(s)
-    if (showHelp):
+    if (help):
         return help
-    return "Maaf command kamu tidak dikenali"
+    return "Maaf, command kamu tidak dikenali"
 
 def getKataPenting(s):
     penting = database.getAllKataPenting()
@@ -37,17 +37,19 @@ def getMatkul(s):
         return False
 
 def getDeadline(s):
-    #x = re.search(r"\b[0-9]{4}-0[1-9]-[0-2][0-9]\b|\b[0-9]{4}-0[1-9]-3[0-1]\b|\b[0-9]{4}-1[0-2]-[0-2][0-9]\b|\b[0-9]{4}-1[0-2]-[3][0-1]\b", s)
     x = re.search(r"\b[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])\b", s)
     if (x):
         return x.group()
     else:
         return False
 
-def getTopik(s):
-    x = re.search("topik", s)
+def getTopik(s, matkul):
+    regex = matkul + " .+ pada"
+    x = re.search(regex, s)
     if (x):
-        return x.group()
+        regex = " pada|"+matkul + " "
+        topik = re.sub(regex, "", x.group())
+        return topik
     else:
         return False
 
@@ -55,9 +57,12 @@ def createTask(s):
     jenis = getKataPenting(s)
     matkul = getMatkul(s)
     deadline = getDeadline(s)
-    topik = getTopik(s)
-    if (jenis and matkul and deadline and topik):
-        return database.InsertTask(deadline, matkul, jenis, topik)
+    if (matkul):
+        topik = getTopik(s, matkul)
+        if (jenis and deadline and topik):
+            return database.InsertTask(deadline, matkul, jenis, topik)
+        else:
+            return False
     else:
         return False
 
@@ -134,7 +139,8 @@ def showHelp(s):
         return False
 
 
-database.CreateTable()
+if __name__ == "__main__":
+    database.CreateTable()
 
-s = "semua deadline" 
-print(executeCommand(s))
+    s = "deadline apa saja?" 
+    print(executeCommand(s))
