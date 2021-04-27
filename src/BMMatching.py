@@ -21,12 +21,11 @@ def bmMatching(p, T):
                     i += len(p)
             j = len(p) - 1
         count += 1
-        print(count)
     return found;
 
 
 def last(p):
-    alfabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    alfabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', ' ']
     lastoccur = {}
     for a in alfabet:
         i = len(p) - 1

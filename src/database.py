@@ -3,7 +3,7 @@ import datetime
 
 # CATATAN: Query buat fitur 3 masih belum diimplementasi soalnya bingung maksud suatu task tuh apanya
 
-connection = sqlite3.connect('../test/database.db')
+connection = sqlite3.connect('database.db')
 cursor = connection.cursor()
 
 def CreateTable():
@@ -89,10 +89,16 @@ def GenerateID():
         return idMaks+1
 
 def InsertTask(deadline, matkul, jenis, topik):
-    idTask = GenerateID()
-    cursor.execute(f"INSERT INTO daftar_task(id, deadline, matkul, jenis, topik) VALUES ('{idTask}', '{deadline}', '{matkul}', '{jenis}', '{topik}')")
-    connection.commit()
-    strRet = f"[TASK BERHASIL DICATAT]\n(ID: {idTask}) {deadline} - {matkul} - {jenis} - {topik}"
+    cursor.execute(f"SELECT * FROM daftar_task WHERE deadline = '{deadline}' and matkul = '{matkul}' and jenis = '{jenis}' and topik = 'topik'")
+    result = cursor.fetchall()
+    if (len(result) == 0):
+        idTask = GenerateID()
+        cursor.execute(f"INSERT INTO daftar_task(id, deadline, matkul, jenis, topik) VALUES ('{idTask}', '{deadline}', '{matkul}', '{jenis}', '{topik}')")
+        connection.commit()
+        strRet = f"[TASK BERHASIL DICATAT]\n(ID: {idTask}) {deadline} - {matkul} - {jenis} - {topik}"
+        
+    else:
+        strRet = f"[TASK SUDAH TERCATAT]\n(ID: {result[0][0]}) {deadline} - {matkul} - {jenis} - {topik}"
     return strRet
 
 def DeleteTask(idTask):
@@ -188,24 +194,25 @@ def help():
         i += 1
     return strRet
 
-CreateTable()
-print(help())
-print(InsertTask('2021-04-26', 'PBO', 'TUBES', 'Tugas Besar 2 Engimon'))
-print(InsertTask('2021-04-28', 'STIMA', 'TUBES', 'Tugas Besar 3 String Matching'))
-print(InsertTask('2021-05-11', 'IF2211', 'MAKALAH', 'Makalah stima'))
-print("="*10, "All Task", "="*10)
-print(PrintAllTask())
-print("="*10, "Task between", "="*10)
-print(PrintTaskBetween('2021-04-20', '2021-04-30'))
-print("="*10, "Task N hari", "="*10)
-print(PrintTaskNHari('2021-04-20', 7, True))
-print("="*10, "Task N minggu", "="*10)
-print(PrintTaskNHari('2021-04-20', 2, False))
-print("="*10, "Task today", "="*10)
-print(PrintTaskToday())
-print("="*10, "Update", "="*10)
-print(UpdateTask(3, '2021-06-01'))
-print(PrintAllTask())
-print("="*10, "Delete", "="*10)
-print(DeleteTask(1))
-print(PrintAllTask())
+if __name__ == "__main__":
+    CreateTable()
+    print(help())
+    print(InsertTask('2021-04-26', 'PBO', 'TUBES', 'Tugas Besar 2 Engimon'))
+    print(InsertTask('2021-04-28', 'STIMA', 'TUBES', 'Tugas Besar 3 String Matching'))
+    print(InsertTask('2021-05-11', 'IF2211', 'MAKALAH', 'Makalah stima'))
+    print("="*10, "All Task", "="*10)
+    print(PrintAllTask())
+    print("="*10, "Task between", "="*10)
+    print(PrintTaskBetween('2021-04-20', '2021-04-30'))
+    print("="*10, "Task N hari", "="*10)
+    print(PrintTaskNHari('2021-04-20', 7, True))
+    print("="*10, "Task N minggu", "="*10)
+    print(PrintTaskNHari('2021-04-20', 2, False))
+    print("="*10, "Task today", "="*10)
+    print(PrintTaskToday())
+    print("="*10, "Update", "="*10)
+    print(UpdateTask(3, '2021-06-01'))
+    print(PrintAllTask())
+    print("="*10, "Delete", "="*10)
+    print(DeleteTask(1))
+    print(PrintAllTask())
