@@ -3,6 +3,22 @@ from BMMatching import bmMatching
 import database
 import re
 
+bulan = {}
+bulan["januari"] = "01"
+bulan["februari"] = "02"
+bulan["maret"] = "03"
+bulan["april"] = "04"
+bulan["mei"] = "05"
+bulan["juni"] = "06"
+bulan["juli"] = "07"
+bulan["agustus"] = "08"
+bulan["september"] = "09"
+bulan["oktober"] = "10"
+bulan["november"] = "11"
+bulan["desember"] = "12"
+
+
+
 
 def executeCommand(s):
     task = getTask(s)
@@ -37,10 +53,16 @@ def getMatkul(s):
         return False
 
 def getDeadline(s):
-    x = re.search(r"\b[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])\b", s)
+    x = re.search(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s)
     if (x):
         return x.group()
     else:
+        y = re.search(r"\b(0[1-9]|[1-2][0-9]|3[0-1]) [A-Z|a-z]+ [0-9]{4}\b", s)
+        if(y):
+            y = y.group().split(" ")
+            result = f"{y[2]}-{bulan[y[1].lower()]}-{y[0]}"
+            print(result)
+            return result
         return False
 
 def getTopik(s, matkul):
@@ -58,8 +80,10 @@ def createTask(s):
     matkul = getMatkul(s)
     deadline = getDeadline(s)
     if (matkul):
+        print("masuk")
         topik = getTopik(s, matkul)
         if (jenis and deadline and topik):
+            print("sini")
             return database.InsertTask(deadline, matkul, jenis, topik)
         else:
             return False
@@ -67,18 +91,22 @@ def createTask(s):
         return False
 
 def updateTask(s):
-    x = bmMatching("menjadi", s)
-    if (x):
+    if (bmMatching("jadi", s)):
         id = re.search(r"\b[0-9]+\b",s)
         deadline = getDeadline(s)
-        if (x and deadline):
+        if (id and deadline):
             return database.UpdateTask(int(id.group()), deadline)
     else:
         return False
 
 def getTask(s):
-    #belum ada liat tugas spesifik
-    if (bmMatching("deadline", s)):
+    if (bmMatching("kapan", s)):
+        jenis = getKataPenting(s)
+        matkul = getMatkul(s)
+        if (jenis in ["Tucil", "Tubes"] and matkul):
+            return database.PrintTaskSpesifik(jenis, matkul)
+    getTask=re.search(r"(a|A)pa saja", s)
+    if (getTask):
         jenis = getKataPenting(s)
         if (jenis):
             x = re.search(r"\b[0-9]+ (hari|minggu)", s)
@@ -90,7 +118,9 @@ def getTask(s):
                 else:
                     return database.PrintTaskNHariKataPenting(date, int(n[0]), False, jenis)
             else:
-                date = re.findall(r"\b[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])\b", s)
+                date = []
+                for match in re.finditer(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s):
+                    date.append(match.group())
                 if (len(date) == 2):
                     return database.PrintTaskBetweenKataPenting(date[0], date[1], jenis)
                 else:
@@ -99,7 +129,7 @@ def getTask(s):
                         return database.PrintTaskTodayKataPenting(jenis)
                     else:
                         return database.PrintAllTaskKataPenting(jenis)
-        else:
+        elif(bmMatching("deadline", s)):
             x = re.search(r"\b[0-9]+ (hari|minggu)", s)
             if (x):
                 n = x.group().split(" ")
@@ -109,7 +139,9 @@ def getTask(s):
                 else:
                     return database.PrintTaskNHari(date, int(n[0]), False)
             else:
-                date = re.findall(r"\b[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])\b", s)
+                date = []
+                for match in re.finditer(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s):
+                    date.append(match.group())
                 if (len(date) == 2):
                     return database.PrintTaskBetween(date[0], date[1])
                 else:
@@ -118,6 +150,8 @@ def getTask(s):
                         return database.PrintTaskToday()
                     else:
                         return database.PrintAllTask()
+        else:
+            return False
     else:
         return False
         
@@ -132,7 +166,7 @@ def removeTask(s):
         return False
 
 def showHelp(s):
-    x = re.search(r"(A|a)pa .*assistant | (A|a)ssistant .*apa", s)
+    x = re.search(r"(A|a)pa .*assistant|(A|a)ssistant .*apa", s)
     if (x):
         return database.help()
     else:
@@ -141,6 +175,6 @@ def showHelp(s):
 
 if __name__ == "__main__":
     database.CreateTable()
-
-    s = "deadline apa saja?" 
-    print(executeCommand(s))
+    while(True):
+        s = input("> ")
+        print(executeCommand(s))

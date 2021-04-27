@@ -54,6 +54,11 @@ def getTaskKataPenting(kata_penting):
     result = cursor.fetchall()
     return result
 
+def getTaskSpesifik(kata_penting, matkul):
+    cursor.execute(f"SELECT * FROM daftar_task WHERE jenis = '{kata_penting}' and matkul = '{matkul}'")
+    result = cursor.fetchall()
+    return result
+
 def getAllKataPenting():
     cursor.execute(f"SELECT * FROM daftar_kata_penting")
     result = cursor.fetchall()
@@ -141,6 +146,17 @@ def PrintTaskByID(idTask):
 def PrintAllTask():
     alltask = getAllTask()
     return PrintTask(alltask)
+
+def PrintTaskSpesifik(kata_penting, matkul):
+    alltask = getTaskSpesifik(kata_penting, matkul)
+    strRet = ""
+    if(len(alltask) == 0):
+        strRet += "Tidak ada"
+    else:
+        strRet += "[DEADLINE]\n"
+        for tupple in alltask:
+            strRet += f"{tupple[4]} : {tupple[1]} \n"
+    return strRet
 
 def PrintTaskBetween(date_1, date_2):
     alltask = getTaskBetween(date_1, date_2)
