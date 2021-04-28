@@ -3,7 +3,7 @@ import datetime
 
 # CATATAN: Query buat fitur 3 masih belum diimplementasi soalnya bingung maksud suatu task tuh apanya
 
-connection = sqlite3.connect('../test/database.db')
+connection = sqlite3.connect('../test/database.db', check_same_thread=False)
 cursor = connection.cursor()
 
 def CreateTable():

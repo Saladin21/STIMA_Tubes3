@@ -2,7 +2,7 @@ def bmMatching(p, T):
     L = last(p)
     i = len(p)-1
     j = i
-    count = 0;
+    count = 0
     found = False
     while (i < len(T) and not found):
         if (p[j].lower() == T[i].lower() and j >= 0):
@@ -21,7 +21,7 @@ def bmMatching(p, T):
                     i += len(p)
             j = len(p) - 1
         count += 1
-    return found;
+    return found
 
 
 def last(p):

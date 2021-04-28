@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+#titleEndGame{
+    margin: 0;
+    font-family: sans-serif;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+p {
+    color: navy;
+    text-indent: 30px;
+}
+#userChat {
+    color: #4b6584;
+    font-family: Trebuchet MS;
+    font-size: 12px;
+    text-align: right;
+    line-height: 30px;
+    background-color: #d1d8e0;
+    padding: 5px;
+    border-radius: 2px;
+    margin-left: auto;
+    width: 60%;
+}
+#botChat {
+    color: whitesmoke;
+    font-family: Trebuchet MS;
+    font-size: 12px;
+    text-align: left;
+    line-height: 30px;
+    background-color: #45aaf2;
+    padding: 5px;
+    border-radius: 2px;
+    margin-right: auto;
+    width: 60%;
+}
+#inputChat {
+    height: 50px;
+    text-align: left;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    resize: none;
+    margin-right: auto;
+    width: 88%;
+}
+#tombolKirim {
+    background-color: #26de81;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>ENDGAMEBOT</title>
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1 id=titleEndGame>ENDGAMEBOT</h1>
+    {% for key, value in chats.items() %}
+        {% if key % 2 != 0 %}
+            <p id="userChat">{{ value }}</p>
+        {% elif key % 2 == 0 %}
+            <p id="botChat">{{ value }}</p>
+        {% endif %}
+    {% endfor %}
+    <form action="/" method="POST">
+        <input type="text" name="content" id="inputChat">
+        <input type="submit" value="Kirim" id="tombolKirim">
+    </form>
+</div>
+{% endblock %}
