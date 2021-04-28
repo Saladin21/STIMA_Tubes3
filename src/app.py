@@ -16,9 +16,11 @@ def index():
 		riwayat[i] = chat_content
 		i+=1
 		riwayat[i] = hasil
-		return render_template('index.html', chats=riwayat)
+		return redirect(url_for('index'))
 	else:
 		return render_template('index.html', chats=riwayat)
+
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
