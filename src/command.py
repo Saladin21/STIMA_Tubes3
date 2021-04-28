@@ -53,16 +53,24 @@ def getMatkul(s):
         return False
 
 def getDeadline(s):
-    x = re.search(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s)
+    # Format YYYY-MM-DD, YYYY MM DD, YYYY/MM/DD
+    x = re.search(r"\b[0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1])\b", s)
     if (x):
-        return x.group()
+        xRet = re.sub(" |/", "-", x.group())
+        return xRet
     else:
-        y = re.search(r"\b(0[1-9]|[1-2][0-9]|3[0-1]) [A-Z|a-z]+ [0-9]{4}\b", s)
+        # Format <DD> <nama_bulan> <YYYY>, <DD>-<nama_bulan>-<YYYY>, <DD>/<nama_bulan>/<YYYY>
+        y = re.search(r"\b(0[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4}\b", s)
         if(y):
-            y = y.group().split(" ")
+            y = re.sub(" |/", "-", y.group()).split("-")
             result = f"{y[2]}-{bulan[y[1].lower()]}-{y[0]}"
-            print(result)
             return result
+        else:
+            # Format DD-MM-YYYY, DD MM YYYY, DD/MM/YYYY
+            z = re.search(r"\b(0[1-9]|[1-2][0-9]|3[0-1])[-\s\/](0[1-9]|1[0-2])[-\s\/][0-9]{4}\b", s)
+            if (z):
+                zRet = re.sub(" |/", "-", z.group()).split("-")
+                return f"{zRet[2]}-{zRet[1]}-{zRet[0]}"
         return False
 
 def getTopik(s, matkul):
@@ -119,8 +127,8 @@ def getTask(s):
                     return database.PrintTaskNHariKataPenting(date, int(n[0]), False, jenis)
             else:
                 date = []
-                for match in re.finditer(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s):
-                    date.append(match.group())
+                for match in re.finditer(r"\b([0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1]))|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4})|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/](0[1-9]|1[0-2])[-\s\/][0-9]{4})\b", s):
+                    date.append(getDeadline(match.group()))
                 if (len(date) == 2):
                     return database.PrintTaskBetweenKataPenting(date[0], date[1], jenis)
                 else:
@@ -140,8 +148,8 @@ def getTask(s):
                     return database.PrintTaskNHari(date, int(n[0]), False)
             else:
                 date = []
-                for match in re.finditer(r"\b[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\b", s):
-                    date.append(match.group())
+                for match in re.finditer(r"\b([0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1]))|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4})|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/](0[1-9]|1[0-2])[-\s\/][0-9]{4})\b", s):
+                    date.append(getDeadline(match.group()))
                 if (len(date) == 2):
                     return database.PrintTaskBetween(date[0], date[1])
                 else:
