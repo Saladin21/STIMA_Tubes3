@@ -1,3 +1,4 @@
+# Mengecek apakah suatu pattern dapat ditemukan dalam sebuah string dengan algoritma Boyer-Moore.
 def bmMatching(p, T):
     L = last(p)
     i = len(p)-1
@@ -23,7 +24,7 @@ def bmMatching(p, T):
         count += 1
     return found
 
-
+# Mengembalikan matriks yang digunakan sebagai last occurrence function pada fungsi bmMatching.
 def last(p):
     alfabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', ' ']
     lastoccur = {}

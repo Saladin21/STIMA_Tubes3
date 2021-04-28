@@ -1,11 +1,10 @@
 import sqlite3
 import datetime
 
-# CATATAN: Query buat fitur 3 masih belum diimplementasi soalnya bingung maksud suatu task tuh apanya
-
 connection = sqlite3.connect('../test/database.db', check_same_thread=False)
 cursor = connection.cursor()
 
+# Membuat tabel pada database untuk penyimpanan data jika belum ada.
 def CreateTable():
     command = '''CREATE TABLE IF NOT EXISTS daftar_kata_penting(kata_penting VARCHAR)'''
     cursor.execute(command)
@@ -20,21 +19,25 @@ def CreateTable():
     cursor.execute(command)
     connection.commit()
 
+#Mendapatkan semua task
 def getAllTask():
     cursor.execute(f"SELECT * FROM daftar_task")
     result = cursor.fetchall()
     return result
 
+#Mendapatkan task berdasarkan id
 def getTaskByID(idTask):
     cursor.execute(f"SELECT * FROM daftar_task WHERE id = '{idTask}'")
     result = cursor.fetchall()
     return result
 
+#Mendapatkan task dengan deadline di antara tanggal date_1 dan date_2
 def getTaskBetween(date_1, date_2):
     cursor.execute(f"SELECT * FROM daftar_task WHERE deadline BETWEEN '{date_1}' AND '{date_2}'")
     result = cursor.fetchall()
     return result
 
+# Mengambil semua task antara hari ini sampai N hari ke depan atau N minggu ke depan dari database. 
 # isHari True jika N merupakan N hari, False jika N merupakan N minggu
 def getTaskNhari(date1, N, isHari):
     date2 = datetime.date.fromisoformat(date1)
@@ -44,31 +47,37 @@ def getTaskNhari(date1, N, isHari):
         date2 += datetime.timedelta(days=7*N)
     return getTaskBetween(date1, date2)
 
+# Mendapatkan task hari ini
 def getTaskToday(today):
     cursor.execute(f"SELECT * FROM daftar_task WHERE deadline = '{today}'")
     result = cursor.fetchall()
     return result
 
+# Mendapatkan task-task dengan kata penting tertentu
 def getTaskKataPenting(kata_penting):
     cursor.execute(f"SELECT * FROM daftar_task WHERE jenis = '{kata_penting}'")
     result = cursor.fetchall()
     return result
 
+# Mendapatkan task berdasarkan kata penting
 def getTaskSpesifik(kata_penting, matkul):
     cursor.execute(f"SELECT * FROM daftar_task WHERE jenis = '{kata_penting}' and matkul = '{matkul}'")
     result = cursor.fetchall()
     return result
 
+# Mendapatkan semua kata penting
 def getAllKataPenting():
     cursor.execute(f"SELECT * FROM daftar_kata_penting")
     result = cursor.fetchall()
     return result
 
+# Mendapatkan task dengan kata penting spesifik dan deadline antara date_1 dan date_2
 def getTaskBetweenKataPenting(date_1, date_2, kata_penting):
     cursor.execute(f"SELECT * FROM daftar_task WHERE jenis = '{kata_penting}' AND deadline BETWEEN '{date_1}' AND '{date_2}'")
     result = cursor.fetchall()
     return result
 
+# Mengambil semua task antara hari ini sampai N hari ke depan atau N minggu ke depan dengan jenis tertentu dari database. 
 def getTaskNhariKataPenting(date1, N, isHari, kata_penting):
     date2 = datetime.date.fromisoformat(date1)
     if(isHari):
@@ -77,11 +86,13 @@ def getTaskNhariKataPenting(date1, N, isHari, kata_penting):
         date2 += datetime.timedelta(days=7*N)
     return getTaskBetweenKataPenting(date1, date2, kata_penting)
 
+# Mendapatkan task hari ini dengan kata penting spesifik
 def getTaskTodayKataPenting(today, kata_penting):
     cursor.execute(f"SELECT * FROM daftar_task WHERE jenis = '{kata_penting}' AND deadline = '{today}'")
     result = cursor.fetchall()
     return result
 
+# Mengenerate ID
 def GenerateID():
     alltask = getAllTask()
     if(len(alltask) == 0):
@@ -93,6 +104,7 @@ def GenerateID():
                 idMaks = tupple[0]
         return idMaks+1
 
+# Memasukkan task baru
 def InsertTask(deadline, matkul, jenis, topik):
     cursor.execute(f"SELECT * FROM daftar_task WHERE deadline = '{deadline}' and matkul = '{matkul}' and jenis = '{jenis}' and topik = '{topik}'")
     result = cursor.fetchall()
@@ -106,6 +118,7 @@ def InsertTask(deadline, matkul, jenis, topik):
         strRet = f"[TASK SUDAH TERCATAT]\n(ID: {result[0][0]}) {deadline} - {matkul} - {jenis} - {topik}"
     return strRet
 
+# Menghapus task
 def DeleteTask(idTask):
     strRet = ""
     if(isIDvalid(idTask)):
@@ -116,6 +129,7 @@ def DeleteTask(idTask):
         strRet += "[Tidak dapat menyelesaikan task karena task tidak dikenali]"
     return strRet
 
+# Memperbarui task
 def UpdateTask(idTask, newDeadline):
     strRet = ""
     if(isIDvalid(idTask)):
@@ -126,6 +140,7 @@ def UpdateTask(idTask, newDeadline):
         strRet += "Tidak dapat memperbarui task karena task tidak dikenali"
     return strRet
 
+# Mengubah hasil query database menjadi string.
 def PrintTask(alltask):
     strRet = ""
     if(len(alltask) == 0):
@@ -138,15 +153,18 @@ def PrintTask(alltask):
             i += 1
     return strRet
 
+# Mengembalikan hasil dari fungsi getTaskByID dalam bentuk string.
 def PrintTaskByID(idTask):
     taskbyID = getTaskByID(idTask)[0]
     strRet = f"(ID: {taskbyID[0]}) {taskbyID[1]} - {taskbyID[2]} - {taskbyID[3]} - {taskbyID[4]}\n"
     return strRet
 
+# Mengembalikan hasil dari fungsi getAllTask dalam bentuk string.
 def PrintAllTask():
     alltask = getAllTask()
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskSpesifik dalam bentuk string.
 def PrintTaskSpesifik(kata_penting, matkul):
     alltask = getTaskSpesifik(kata_penting, matkul)
     strRet = ""
@@ -158,36 +176,44 @@ def PrintTaskSpesifik(kata_penting, matkul):
             strRet += f"{tupple[4]} : {tupple[1]} \n"
     return strRet
 
+# Mengembalikan hasil dari fungsi getTaskBetween dalam bentuk string.
 def PrintTaskBetween(date_1, date_2):
     alltask = getTaskBetween(date_1, date_2)
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskNHari dalam bentuk string.
 # isHari = True jika N merupakan N hari, isHari = False jika N merupakan N minggu
 def PrintTaskNHari(date1, N, isHari):
     alltask = getTaskNhari(date1, N, isHari)
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskToday dalam bentuk string.
 def PrintTaskToday():
     alltask = getTaskToday(datetime.date.today())
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getAllTaskKataPenting dalam bentuk string.
 def PrintAllTaskKataPenting(kata_penting):
     alltask = getTaskKataPenting(kata_penting)
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskBetweenKataPenting dalam bentuk string.
 def PrintTaskBetweenKataPenting(date_1, date_2, kata_penting):
     alltask = getTaskBetweenKataPenting(date_1, date_2, kata_penting)
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskNHariKataPenting dalam bentuk string.
 # isHari = True jika N merupakan N hari, isHari = False jika N merupakan N minggu
 def PrintTaskNHariKataPenting(date1, N, isHari, kata_penting):
     alltask = getTaskNhariKataPenting(date1, N, isHari, kata_penting)
     return PrintTask(alltask)
 
+# Mengembalikan hasil dari fungsi getTaskTodayKataPenting dalam bentuk string.
 def PrintTaskTodayKataPenting(kata_penting):
     alltask = getTaskTodayKataPenting(datetime.date.today(), kata_penting)
     return PrintTask(alltask)
 
+# Mengecek kevalidan id task
 def isIDvalid(idTask):
     alltask = getAllTask()
     for tupple in alltask:
@@ -195,6 +221,7 @@ def isIDvalid(idTask):
             return True
     return False
 
+# fitur help
 def help():
     fitur = ["Menambahkan task baru", "Melihat daftar task yang harus dikerjakan", "Menampilkan deadline dari suatu task tertentu", "Memperbarui task tertentu", "Menandai bahwa suatu task sudah selesai dikerjakan"]
     katapenting = getAllKataPenting()
@@ -210,6 +237,7 @@ def help():
         i += 1
     return strRet
 
+# Testing
 if __name__ == "__main__":
     CreateTable()
     print(help())

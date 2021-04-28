@@ -19,7 +19,7 @@ bulan["desember"] = "12"
 
 
 
-
+# Menjalankan fitur sesuai masukan user atau memberikan pesan error jika perintah user tidak dikenali
 def executeCommand(s):
     task = getTask(s)
     if (task):
@@ -38,6 +38,7 @@ def executeCommand(s):
         return help
     return "Maaf, command kamu tidak dikenali"
 
+# Mengekstrak kata penting yang terdapat pada suatu string
 def getKataPenting(s):
     penting = database.getAllKataPenting()
     for kata in penting:
@@ -45,6 +46,7 @@ def getKataPenting(s):
             return kata[0]
     return False
 
+# Mengekstrak kode mata kuliah dari suatu string
 def getMatkul(s):
     x = re.search(r"\b[A-Z]{2}[1-4][0-2][0-9]{2}\b", s)
     if (x):
@@ -52,6 +54,7 @@ def getMatkul(s):
     else:
         return False
 
+# Mengekstrak tanggal deadline dari suatu string
 def getDeadline(s):
     # Format YYYY-MM-DD, YYYY MM DD, YYYY/MM/DD
     x = re.search(r"\b[0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1])\b", s)
@@ -73,6 +76,7 @@ def getDeadline(s):
                 return f"{zRet[2]}-{zRet[1]}-{zRet[0]}"
         return False
 
+# Mengekstrak topik dari suatu string
 def getTopik(s, matkul):
     regex = matkul + " .+ pada"
     x = re.search(regex, s)
@@ -83,6 +87,8 @@ def getTopik(s, matkul):
     else:
         return False
 
+# Membuat sebuah task baru jika string masukan memiliki 4 komponen yakni kata penting, kode matkul,
+# topik, dan tanggal deadline
 def createTask(s):
     jenis = getKataPenting(s)
     matkul = getMatkul(s)
@@ -96,6 +102,7 @@ def createTask(s):
     else:
         return False
 
+# Memperbarui suatu task 
 def updateTask(s):
     if (bmMatching("jadi", s)):
         id = re.search(r"\b[0-9]+\b",s)
@@ -105,6 +112,7 @@ def updateTask(s):
     else:
         return False
 
+# Menampilkan luaran sesuai dengan fitur
 def getTask(s):
     if (bmMatching("kapan", s)):
         jenis = getKataPenting(s)
@@ -160,7 +168,8 @@ def getTask(s):
             return False
     else:
         return False
-        
+
+# Menghapus task        
 def removeTask(s):
     if (bmMatching("selesai", s)):
         x = re.search(r"\b[0-9]+\b", s)
@@ -171,6 +180,7 @@ def removeTask(s):
     else:
         return False
 
+# Menampilkan fitur-fitur dan daftar kata penting
 def showHelp(s):
     x = re.search(r"(A|a)pa .*assistant|(A|a)ssistant .*apa", s)
     if (x):
@@ -178,7 +188,7 @@ def showHelp(s):
     else:
         return False
 
-
+# Testing
 if __name__ == "__main__":
     database.CreateTable()
     while(True):
