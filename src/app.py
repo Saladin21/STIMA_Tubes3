@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 import command as c
+import database as db
 
 app = Flask(__name__)
 riwayat = {}
@@ -23,4 +24,5 @@ def index():
 
 
 if __name__ == '__main__':
+	db.CreateTable()
 	app.run(debug=True)
