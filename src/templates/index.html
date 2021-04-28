@@ -21,10 +21,16 @@
                 </div>
             {% endif %}
         {% endfor %}
-        <form action="/" method="POST">
+        <form action="/" method="POST" id = "form">
             <input placeholder="Ketik perintah di sini" type="text" name="content" id="inputChat">
             <input type="submit" value="Kirim" id="tombolKirim">
         </form>
+        
     {% endautoescape %}
+    <script>
+        form = document.getElementById("form");
+        form.focus()
+        form.scrollIntoView();
+    </script>
 </div>
 {% endblock %}
