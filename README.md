@@ -55,6 +55,9 @@ def bmMatching(p, T):
 4. Salin link localhost dan buka pada browser seperti Google Chrome
 5. Program dibuka dan dapat dijalankan
 
+* Melalui Website Hasil Deployment
+Buka link https://endgamebot.herokuapp.com untuk mengakses website EndgameBot hasil web deploy
+
 ## Fitur Program
 1. Menambahkan task baru
 2. Melihat daftar task yang harus dikerjakan
