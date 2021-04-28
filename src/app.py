@@ -11,6 +11,7 @@ def index():
 	if request.method == 'POST':
 		chat_content = request.form['content']
 		hasil = c.executeCommand(chat_content)
+		hasil = hasil.replace('\n', '<br>')
 		i+=1
 		riwayat[i] = chat_content
 		i+=1

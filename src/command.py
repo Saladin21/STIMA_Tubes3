@@ -128,7 +128,7 @@ def getTask(s):
             else:
                 date = []
                 for match in re.finditer(r"\b([0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1]))|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4})|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/](0[1-9]|1[0-2])[-\s\/][0-9]{4})\b", s):
-                    date.append(getDeadline(match.group()))
+                     date.append(getDeadline(match.group()))
                 if (len(date) == 2):
                     return database.PrintTaskBetweenKataPenting(date[0], date[1], jenis)
                 else:
@@ -149,7 +149,7 @@ def getTask(s):
             else:
                 date = []
                 for match in re.finditer(r"\b([0-9]{4}[-\s\/](0[1-9]|1[0-2])[-\s\/](0[1-9]|[1-2][0-9]|3[0-1]))|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4})|((0[1-9]|[1-2][0-9]|3[0-1])[-\s\/](0[1-9]|1[0-2])[-\s\/][0-9]{4})\b", s):
-                    date.append(getDeadline(match.group()))
+                     date.append(getDeadline(match.group()))
                 if (len(date) == 2):
                     return database.PrintTaskBetween(date[0], date[1])
                 else:

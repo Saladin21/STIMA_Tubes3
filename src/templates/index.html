@@ -1,22 +1,30 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>ENDGAMEBOT</title>
 {% endblock %}
 
 {% block body %}
 <div>
-    <h1 id=titleEndGame>ENDGAMEBOT</h1>
-    {% for key, value in chats.items() %}
-        {% if key % 2 != 0 %}
-            <p id="userChat">{{ value }}</p>
-        {% elif key % 2 == 0 %}
-            <p id="botChat">{{ value }}</p>
-        {% endif %}
-    {% endfor %}
-    <form action="/" method="POST">
-        <input type="text" name="content" id="inputChat">
-        <input type="submit" value="Kirim" id="tombolKirim">
-    </form>
+    {% autoescape false %}
+        <h1 id=titleEndGame>ENDGAMEBOT</h1>
+        <h2 id=titleEndGame>Your Deadline Reminder Assistant</h2>
+        {% for key, value in chats.items() %}
+            {% if key % 2 != 0 %}
+                <div class="userChat">
+                    <p id="userChatText">{{ value }}</p>
+                    <img src="{{ url_for('static', filename='img/user.png') }}" width="50" height="50">
+                </div>
+            {% elif key % 2 == 0 %}
+                <div class="botChat">
+                    <img src="{{ url_for('static', filename='img/avatar.png') }}" width="50" height="50">
+                    <p id="botChatText">{{ value }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <form action="/" method="POST">
+            <input placeholder="Ketik perintah di sini" type="text" name="content" id="inputChat">
+            <input type="submit" value="Kirim" id="tombolKirim">
+        </form>
+    {% endautoescape %}
 </div>
 {% endblock %}

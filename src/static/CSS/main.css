@@ -4,10 +4,12 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 60%;
+    background-color: #ffffff;
 }
 #titleEndGame{
     margin: 0;
-    font-family: sans-serif;
+    color: #2f3542;
+    font-family: Trebuchet MS;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -17,7 +19,11 @@ p {
     color: navy;
     text-indent: 30px;
 }
-#userChat {
+.userChat{
+    display: flex;
+    align-items: center;
+}
+#userChatText {
     color: #4b6584;
     font-family: Trebuchet MS;
     font-size: 12px;
@@ -29,7 +35,11 @@ p {
     margin-left: auto;
     width: 60%;
 }
-#botChat {
+.botChat {
+    display: flex;
+    align-items: center;
+}
+#botChatText {
     color: whitesmoke;
     font-family: Trebuchet MS;
     font-size: 12px;
