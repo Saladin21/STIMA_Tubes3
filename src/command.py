@@ -88,10 +88,8 @@ def createTask(s):
     matkul = getMatkul(s)
     deadline = getDeadline(s)
     if (matkul):
-        print("masuk")
         topik = getTopik(s, matkul)
         if (jenis and deadline and topik):
-            print("sini")
             return database.InsertTask(deadline, matkul, jenis, topik)
         else:
             return False

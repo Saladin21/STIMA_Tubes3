@@ -94,7 +94,7 @@ def GenerateID():
         return idMaks+1
 
 def InsertTask(deadline, matkul, jenis, topik):
-    cursor.execute(f"SELECT * FROM daftar_task WHERE deadline = '{deadline}' and matkul = '{matkul}' and jenis = '{jenis}' and topik = 'topik'")
+    cursor.execute(f"SELECT * FROM daftar_task WHERE deadline = '{deadline}' and matkul = '{matkul}' and jenis = '{jenis}' and topik = '{topik}'")
     result = cursor.fetchall()
     if (len(result) == 0):
         idTask = GenerateID()
