@@ -66,6 +66,8 @@ def getDeadline(s):
         y = re.search(r"\b(0*[1-9]|[1-2][0-9]|3[0-1])[-\s\/][A-Z|a-z]+[-\s\/][0-9]{4}\b", s)
         if(y):
             y = re.sub(" |/", "-", y.group()).split("-")
+            if (len(y[0]) == 1):
+                y[0] = '0' + y[0]
             result = f"{y[2]}-{bulan[y[1].lower()]}-{y[0]}"
             return result
         else:
